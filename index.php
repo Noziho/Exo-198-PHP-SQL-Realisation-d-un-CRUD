@@ -1,66 +1,28 @@
-<?php
-require __DIR__ . '/Config.php';
-require __DIR__ . '/DB_Connect.php';
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
 
-function add_student(string $nom, string $prenom, int $age)
-{
-    $sql = DB_Connect::dbConnect()->prepare("
-        INSERT INTO eleves (nom, prenom, age)
-        VALUES(:nom, :prenom, :age);
-    ");
+<form action="/inscription.php" method="post">
+    <label for="last_name">Nom: </label>
+    <input type="text" id="last_name" name="last_name" minlength="3" maxlength="80">
 
-    $sql->execute([
-        ':nom' => $nom,
-        ':prenom' => $prenom,
-        ':age' => $age
-    ]);
+    <label for="first_name">Prénom: </label>
+    <input type="text" id="first_name" name="first_name" minlength="3" maxlength="50">
 
-    echo "L'utilisateur à été ajouté.";
-}
+    <label for="age">Âge: </label>
+    <input type="number"  id="age" name="age" max="120">
 
-function read_eleves()
-{
-    $stmt = DB_Connect::dbConnect()->prepare("SELECT * FROM eleves");
+    <input type="submit" name="validate">
+</form>
 
-    if ($stmt->execute()) {
+<a href="/listUser.php">Liste des élèves</a>
 
-        foreach ($stmt->fetchAll() as $value) {
-            { ?>
-                <div><?php
-                foreach ($value as $key => $eleves) {
-                    echo $key . "=>" . $eleves . "<br>";
-
-                }
-            } ?>
-            </div><?php
-        }
-    }
-}
-
-function update_eleves ($prenom, $nom, $age, $idEleve) {
-    $stmt = DB_Connect::dbConnect()->prepare("
-        UPDATE eleves SET prenom = :prenom, nom = :nom, age = :age WHERE id = :id
-    ");
-
-    $stmt->bindParam(':prenom', $prenom);
-    $stmt->bindParam(':nom', $nom);
-    $stmt->bindParam(':age', $age);
-    $stmt->bindParam(':id', $idEleve);
-
-    $stmt->execute();
-
-    echo "Eleve mis à jour avec succès";
-}
-
-function delete_eleves ($idEleve) {
-    $stmt = DB_Connect::dbConnect()->prepare("
-        DELETE FROM eleves WHERE id = :id
-    ");
-
-    $stmt->bindParam(':id', $idEleve);
-
-    $stmt->execute();
-
-    echo "Eleve supprimé avec succès";
-
-}
+</body>
+</html>
